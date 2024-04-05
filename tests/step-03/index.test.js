@@ -15,12 +15,12 @@ test('Parse SQL Query', () => {
     expect(parsed1).toEqual({
         fields: ['id', 'name'],
         table: 'sample',
-        whereClause:null
+        whereClause:[]
     });
     const parsed2 = parseQuery(errorQuery);
     expect(parsed2).toEqual({
         fields: ['id', 'name'],
         table: 'sample',
-        whereClause:null
+        whereClauses:[]
     });
 });
