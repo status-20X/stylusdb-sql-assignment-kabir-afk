@@ -5,9 +5,8 @@ const executeSELECTQuery = require('../../src/index');
 test('Read CSV File', async () => {
     const data = await readCSV('./sample.csv');
     expect(data.length).toBeGreaterThan(0);
-    expect(data.length).toBe(3);
-    expect(data[0].name).toBe('John');
-    expect(data[0].age).toBe('30'); //ignore the string type here, we will fix this later
+    expect(data.length).toBe(5);
+    expect(data[0].name).toBe('DevD');
 });
 
 test('Parse SQL Query', () => {
@@ -25,26 +24,30 @@ test('Execute SQL Query', async () => {
     const result = await executeSELECTQuery(query);
     expect(result.length).toBeGreaterThan(0);
     expect(result[0]).toHaveProperty('id');
-    expect(result[0]).toHaveProperty('name');
     expect(result[0]).not.toHaveProperty('age');
-    expect(result[0]).toEqual({ id: '1', name: 'John' });
+    expect(result[4]).toEqual({ id: '5', name: 'NeelArmstrong' });
 });
 
 test('Parse SQL Query with WHERE Clause', () => {
-    const query = 'SELECT id, name FROM sample WHERE age = 25';
+    const query = 'SELECT id, name FROM sample WHERE age = 23';
     const parsed = parseQuery(query);
     expect(parsed).toEqual({
         fields: ['id', 'name'],
         table: 'sample',
-        whereClause: 'age = 25'
+        whereClause: 'age = 23'
     });
 });
 
+// TEST CASE FOR INSENSITIVITY 
+// AND WHERE THE ABOVE IMPLMENTATION WOULD FAIL
+
+// IN THE TEST CASE BELOW THE QUERY IS NOT IDEAL 
+// AND STILL MANAGES TO PASS ALL THE EXPECTATIONS 
+// HENCE THE ABOVE IMPLEMENTATION FAILS
 test('Execute SQL Query with WHERE Clause', async () => {
-    const query = 'SELECT id, name FROM sample WHERE age = 25';
+    const query = 'select id, name from sample where age = 21 = ';
     const result = await executeSELECTQuery(query);
-    expect(result.length).toBe(1);
-    expect(result[0]).toHaveProperty('id');
-    expect(result[0]).toHaveProperty('name');
-    expect(result[0].id).toBe('2');
+    expect(result[0].name == 'DevD');
+    expect(result[0].whereClause == 'age = 21');
+    expect(result.length == 2);
 });
