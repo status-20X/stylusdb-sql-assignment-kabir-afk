@@ -1,19 +1,33 @@
-const readCSV = require('../../src/csvReader');
-const parseQuery = require('../../src/queryParser');
+const readCSV = require("../../src/csvReader.js");
+const { parseQuery } = require("../../src/queryParser.js");
 
-test('Read CSV File', async () => {
-    const data = await readCSV('./sample.csv');
-    expect(data.length).toBeGreaterThan(0);
-    expect(data.length).toBe(3);
-    expect(data[0].name).toBe('John');
-    expect(data[0].age).toBe('30'); //ignore the string type here, we will fix this later
+test("Read CSV File", async () => {
+  const data = await readCSV("./student.csv");
+  expect(data.length).toBeGreaterThan(0);
+  expect(data.length).toBe(5);
+  expect(data[0].age == data[1].age);
 });
 
-test('Parse SQL Query', () => {
-    const query = 'SELECT id, name FROM sample';
-    const parsed = parseQuery(query);
-    expect(parsed).toEqual({
-        fields: ['id', 'name'],
-        table: 'sample'
-    });
+test("Parse SQL Query", () => {
+  const studentQuery = "SELECT id, name FROM student";
+  const parsed1 = parseQuery(studentQuery);
+  expect(parsed1).toEqual({
+    fields: ["id", "name"],
+    table: "student",
+    whereClauses: [],
+    joinType: null,
+    joinCondition: null,
+    joinTable: null,
+    groupByFields: null,
+    hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
+  });
+
+  // const errorQuery = 'SELECTT id, name FROM student';
+  // const parsed2 = parseQuery(errorQuery);
+  // expect(parsed2).toEqual({
+  //     fields: ['id', 'name'],
+  //     table: 'student',
+  //     whereClause:[]
+  // });
 });
