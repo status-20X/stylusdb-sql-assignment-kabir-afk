@@ -1,5 +1,5 @@
 const readCSV = require("../../src/csvReader.js");
-const parseQuery = require("../../src/queryParser.js");
+const {parseQuery} = require("../../src/queryParser.js");
 const executeSELECTQuery = require("../../src/index.js");
 
 test("Read CSV File", async () => {
@@ -16,9 +16,11 @@ test("Parse SQL Query", () => {
     fields: ["id", "name"],
     table: "student",
     whereClauses: [],
-    joinType:null,
     joinCondition: null,
     joinTable: null,
+    joinType:null,
+    groupByFields: null,
+    hasAggregateWithoutGroupBy: false,orderByFields:null
   });
 });
 

@@ -1,5 +1,5 @@
 const readCSV = require("../../src/csvReader.js");
-const parseQuery = require("../../src/queryParser.js");
+const { parseQuery } = require("../../src/queryParser.js");
 const executeSELECTQuery = require("../../src/index.js");
 
 test("Read CSV File", async () => {
@@ -16,9 +16,12 @@ test("Parse SQL Query", () => {
     fields: ["id", "name"],
     table: "student",
     whereClauses: [],
-    joinType:null,
     joinCondition: null,
     joinTable: null,
+    joinType: null,
+    groupByFields: null,
+    hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
   });
 });
 
@@ -36,9 +39,12 @@ test("Parse SQL Query with WHERE Clause", () => {
   const parsed = parseQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
-    joinType:null,
     joinCondition: null,
     joinTable: null,
+    joinType: null,
+    groupByFields: null,
+    hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
     table: "student",
     whereClauses: [
       {
@@ -57,9 +63,12 @@ test("Execute SQL Query with WHERE Clause", () => {
     fields: ["id", "name"],
     table: "student",
     whereClauses: [{ field: "age", operator: "=", value: "23" }],
+    joinType: null,
     joinCondition: null,
     joinTable: null,
-    joinType:null,
+    groupByFields: null,
+    hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
   });
 });
 
@@ -68,9 +77,12 @@ test("Parse SQL Query with Multiple WHERE Clauses", () => {
   const parsed = parseQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
+    joinType: null,
     joinCondition: null,
     joinTable: null,
-    joinType:null,
+    groupByFields: null,
+    hasAggregateWithoutGroupBy: false,
+    orderByFields: null,
     table: "student",
     whereClauses: [
       {
@@ -87,16 +99,16 @@ test("Parse SQL Query with Multiple WHERE Clauses", () => {
   });
 });
 
-test('Execute SQL Query with Greater Than', async () => {
-    const queryWithGT = 'SELECT id FROM student WHERE age > 22';
-    const result = await executeSELECTQuery(queryWithGT);
-    expect(result.length).toEqual(1);
-    expect(result[0]).toHaveProperty('id');
+test("Execute SQL Query with Greater Than", async () => {
+  const queryWithGT = "SELECT id FROM student WHERE age > 22";
+  const result = await executeSELECTQuery(queryWithGT);
+  expect(result.length).toEqual(1);
+  expect(result[0]).toHaveProperty("id");
 });
 
-test('Execute SQL Query with Not Equal to', async () => {
-    const queryWithGT = 'SELECT name FROM student WHERE age != 25';
-    const result = await executeSELECTQuery(queryWithGT);
-    expect(result.length).toEqual(5);
-    expect(result[0]).toHaveProperty('name');
+test("Execute SQL Query with Not Equal to", async () => {
+  const queryWithGT = "SELECT name FROM student WHERE age != 25";
+  const result = await executeSELECTQuery(queryWithGT);
+  expect(result.length).toEqual(5);
+  expect(result[0]).toHaveProperty("name");
 });
